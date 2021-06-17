@@ -1,0 +1,6 @@
+Sua file application.properties 
+
+set spring.profiles.active=prod cho chay moi truong production
+sua file : application-prod.properties ==> thong tin ket noi db
+vao swagger: http://localhost:8383/hq-qrcode-api/swagger-ui/index.html , doi localhost to IP or domain trien khai.
+Test xem chayj chua: http://localhost:8383/hq-qrcode-api/home/

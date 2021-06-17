@@ -1,0 +1,1 @@
+web: java $JAVA_OPTS -Xss512k -XX:CICompilerCount=2 -Xmx256M -XX:+UseContainerSupport -Dserver.port=$PORT -Dfile.encoding=UTF-8 -jar com-services-api/target/com-services-api-spring-boot.jar
