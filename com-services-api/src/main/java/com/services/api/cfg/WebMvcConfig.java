@@ -35,6 +35,11 @@ import java.util.List;
 @EnableAsync
 @Slf4j
 public class WebMvcConfig implements WebMvcConfigurer {
+    /**
+     *
+     */
+    private static final int MAX_AGE_SECS = 3600;
+
     @Autowired
     MyIntercepter myIntercepter;
 
@@ -112,5 +117,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
         DateFormatter dateFormatter = new DateFormatter(DATE_TIME_FORMAT);
         dateFormatter.setLenient(true);
         registry.addFormatter(dateFormatter);
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+        .allowedOrigins("*")
+        .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+        .allowedHeaders("*")
+        .allowCredentials(true)
+        .maxAge(_3600);
     }
 }
