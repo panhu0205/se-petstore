@@ -10,9 +10,7 @@ import lombok.Data;
 @Data
 @ApiModel
 public class CreatePetForm {
-    @NotNull(message = "petId cannot be null")
-    @ApiModelProperty(name = "petId")
-    private Long petId; 
+
     @NotNull(message = "petGender cannot be null")
     @ApiModelProperty(name = "petGender")
     private Integer petGender;    

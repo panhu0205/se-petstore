@@ -55,7 +55,17 @@ public class WebMvcConfig implements WebMvcConfigurer {
             "/v1/account/**",
             "/v1/group/**",
             "/v1/permission/**",
-            "/v1/province/**"
+            "/v1/breed/**",
+            "/v1/bill/**",
+            "/v1/billdetail/**",
+            "/v1/cart/**",
+            "/v1/cartdetail/**",
+            "/v1/order/**",
+            "/v1/orderdetail/**",
+            "/v1/pet/**",
+            "/v1/post/**",
+            "/v1/product/**",
+            "/v1/product-category/**",
         };
         registry.addInterceptor(myIntercepter).addPathPatterns(checkArray).excludePathPatterns(arrayExclude);
     }

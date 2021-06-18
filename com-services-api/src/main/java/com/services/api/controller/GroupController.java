@@ -42,15 +42,15 @@ public class GroupController extends ABasicController{
 
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ApiMessageDto<ResponseListObj<GroupAdminDto>> getList(GroupCriteria groupCriteria){
-        if(!isAdmin()){
-            throw new UnauthorizationException("Not allowed to get");
-        }
+        // if(!isAdmin()){
+        //     throw new UnauthorizationException("Not allowed to get");
+        // }
 
-        if(isSuperAdmin()){
-            groupCriteria.setIsSuperAdmin(null);
-        }else{
-            groupCriteria.setIsSuperAdmin(false);
-        }
+        // if(isSuperAdmin()){
+        //     groupCriteria.setIsSuperAdmin(null);
+        // }else{
+        //     groupCriteria.setIsSuperAdmin(false);
+        // }
 
         ApiMessageDto<ResponseListObj<GroupAdminDto>> apiMessageDto = new ApiMessageDto<>();
         Page<Group> groupPage = groupRepository.findAll(groupCriteria.getSpecification(),Pageable.unpaged());
@@ -66,11 +66,11 @@ public class GroupController extends ABasicController{
     @GetMapping(value = "/list_combobox", produces = MediaType.APPLICATION_JSON_VALUE)
     public ApiMessageDto<ResponseListObj<GroupAdminDto>> getListCombox(){
         GroupCriteria groupCriteria = new GroupCriteria();
-        if(isSuperAdmin()){
-            groupCriteria.setIsSuperAdmin(null);
-        }else{
-            groupCriteria.setIsSuperAdmin(false);
-        }
+        // if(isSuperAdmin()){
+        //     groupCriteria.setIsSuperAdmin(null);
+        // }else{
+        //     groupCriteria.setIsSuperAdmin(false);
+        // }
 
         ApiMessageDto<ResponseListObj<GroupAdminDto>> apiMessageDto = new ApiMessageDto<>();
         Page<Group> groupPage = groupRepository.findAll(groupCriteria.getSpecification(),Pageable.unpaged());
@@ -85,9 +85,9 @@ public class GroupController extends ABasicController{
 
     @PostMapping(value = "/create", produces= MediaType.APPLICATION_JSON_VALUE)
     public ApiMessageDto<String> create(@Valid @RequestBody CreateGroupForm createGroupForm, BindingResult bindingResult) {
-        if(!isSuperAdmin()){
-            throw new UnauthorizationException("Not allowed create.");
-        }
+        // if(!isSuperAdmin()){
+        //     throw new UnauthorizationException("Not allowed create.");
+        // }
         ApiMessageDto<String> apiMessageDto = new ApiMessageDto<>();
         Group group = groupRepository.findFirstByName(createGroupForm.getName());
         if(group != null){
@@ -115,9 +115,9 @@ public class GroupController extends ABasicController{
 
     @PutMapping(value = "/update", produces= MediaType.APPLICATION_JSON_VALUE)
     public ApiMessageDto<String> update(@Valid @RequestBody UpdateGroupForm updateGroupForm, BindingResult bindingResult) {
-        if(!isSuperAdmin()){
-            throw new UnauthorizationException("Not allowed update.");
-        }
+    //     if(!isSuperAdmin()){
+    //         throw new UnauthorizationException("Not allowed update.");
+    //     }
         ApiMessageDto<String> apiMessageDto = new ApiMessageDto<>();
         Group group = groupRepository.findById(updateGroupForm.getId()).orElse(null);
         if(group == null){
@@ -150,9 +150,9 @@ public class GroupController extends ABasicController{
 
     @GetMapping(value = "/get/{id}", produces= MediaType.APPLICATION_JSON_VALUE)
     public ApiMessageDto<GroupAdminDto> get(@PathVariable("id")  Long id) {
-        if(!isAdmin()){
-            throw new UnauthorizationException("Not allowed to get.");
-        }
+        // if(!isAdmin()){
+        //     throw new UnauthorizationException("Not allowed to get.");
+        // }
         ApiMessageDto<GroupAdminDto> apiMessageDto = new ApiMessageDto<>();
         Group group =groupRepository.findById(id).orElse(null);
         apiMessageDto.setData(groupMapper.fromEntityToGroupAdminDto(group));
@@ -163,9 +163,9 @@ public class GroupController extends ABasicController{
     @Transactional
     @DeleteMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ApiMessageDto<String> delete(@PathVariable Long id){
-        if(!isSuperAdmin()){
-            throw new UnauthorizationException("Not allowed to delete");
-        }
+        // if(!isSuperAdmin()){
+        //     throw new UnauthorizationException("Not allowed to delete");
+        // }
         ApiMessageDto<String> apiMessageDto = new ApiMessageDto<>();
         Group group = groupRepository.findById(id).orElse(null);
         if(group == null){
