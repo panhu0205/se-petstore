@@ -23,5 +23,5 @@ public class UpdateOrderDetailForm {
     private Integer orderDetailQuantity;
     @NotNull(message = "orderDetailPrice cannot be null")
     @ApiModelProperty(name = "orderDetailPrice")
-    private Long orderDetailPrice; 
+    private Integer orderDetailPrice; 
 }

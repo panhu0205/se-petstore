@@ -50,9 +50,6 @@ public class Application {
         if(account == null){
             List<Permission> defaultPermission = addPermission();
             Group group = initGroupDefault(defaultPermission);
-
-
-
             account = new Account();
             account.setUsername("admin");
             account.setPassword(passwordEncoder.encode("admin123654"));
@@ -107,17 +104,21 @@ public class Application {
         Group customerGroup = new Group();
         customerGroup.setKind(1);
         customerGroup.setName("ROLE CUSTOMER");
-        customerGroup.setId(1L);
         customerGroup.setPermissions(defaultPermission);
         groupRepository.save(customerGroup);
 
-        Group vendorGroup = new Group();
-        vendorGroup.setKind(1);
-        vendorGroup.setName("ROLE VENDOR");
-        vendorGroup.setId(1L);
-        vendorGroup.setPermissions(defaultPermission);
-        groupRepository.save(vendorGroup); 
+        Group staffGroup = new Group();
+        staffGroup.setKind(1);
+        staffGroup.setName("ROLE STAFF");
+        staffGroup.setPermissions(defaultPermission);
+        groupRepository.save(staffGroup); 
         
+        Group managerGroup = new Group();
+        managerGroup.setKind(1);
+        managerGroup.setName("ROLE MANAGER");
+        managerGroup.setPermissions(defaultPermission);
+        groupRepository.save(managerGroup); 
+
         Group superAdminGroup = new Group();
         superAdminGroup.setKind(1);
         superAdminGroup.setName("ROLE SUPPER ADMIN");

@@ -8,12 +8,17 @@ import com.services.api.dto.ResponseListObj;
 import com.services.api.dto.cart.CartDto;
 import com.services.api.form.cart.CreateCartForm;
 import com.services.api.form.cart.UpdateCartForm;
+import com.services.api.form.cartdetail.AddToCartForm;
 import com.services.api.mapper.CartMapper;
 import com.services.api.storage.criteria.CartCriteria;
 import com.services.api.storage.model.Account;
 import com.services.api.storage.model.Cart;
+import com.services.api.storage.model.CartDetail;
+import com.services.api.storage.model.Product;
 import com.services.api.storage.repository.AccountRepository;
+import com.services.api.storage.repository.CartDetailRepository;
 import com.services.api.storage.repository.CartRepository;
+import com.services.api.storage.repository.ProductRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,6 +49,11 @@ public class CartController {
     @Autowired
     AccountRepository accountRepository;
     
+    @Autowired
+    ProductRepository productRepository;
+
+    @Autowired
+    CartDetailRepository cartDetailRepository;
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ApiMessageDto<ResponseListObj<CartDto>> list(CartCriteria cartCriteria, Pageable pageable) {
 
@@ -107,7 +117,47 @@ public class CartController {
         return apiMessageDto;
     }
 
+    @PostMapping(value = "/add-to-cart/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ApiMessageDto<String> addToCart(@Valid @RequestBody AddToCartForm addToCartForm,
+            BindingResult bindingResult, @Valid @RequestBody Long id) {
+        // if (!isAdmin()) {
+        // throw new UnauthorizationException("Not allowed to create");
+        // }
 
+        ApiMessageDto<String> apiMessageDto= new ApiMessageDto<>();
+        Product product = productRepository.findById(addToCartForm.getCartDetailProductId()).orElse(null);
+        if (product == null){
+            apiMessageDto.setResult(false);
+            apiMessageDto.setMessage("Product not found!");
+            return apiMessageDto;
+        }
+        CartDetail cartDetail = new CartDetail();
+        Cart cart = cartRepository.findByCustomerId(id).orElse(null);
+        if(cart == null)
+        {   
+            cart = new Cart();
+            Account customer = accountRepository.findById(id).orElse(null);
+            cart.setCustomer(customer);
+            cartRepository.save(cart);
+            cartDetail.setCart(cart);            
+            cartDetail.setQuantity(addToCartForm.getCartDetailQuantity());
+        }else{ 
+            cartDetail = cartDetailRepository.findByProductIdAndCartId(addToCartForm.getCartDetailProductId(), cart.getId()).orElse(null);
+            if(cartDetail != null){
+                cartDetail.setQuantity(cartDetail.getQuantity() + addToCartForm.getCartDetailQuantity());
+            }else
+            {
+                cartDetail = new CartDetail();
+                cartDetail.setProduct(product);
+                cartDetail.setQuantity(addToCartForm.getCartDetailQuantity());
+                cartDetail.setCart(cart);
+            }
+        }
+        cartDetailRepository.save(cartDetail);
+        apiMessageDto.setResult(true);
+        apiMessageDto.setMessage("Add to Cart success!");
+        return apiMessageDto;
+    }
 
     @PutMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
     public ApiMessageDto<String> update(@Valid @RequestBody UpdateCartForm updateCartForm,
