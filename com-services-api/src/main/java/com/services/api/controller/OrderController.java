@@ -1,18 +1,26 @@
 package com.services.api.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import com.services.api.dto.ApiMessageDto;
 import com.services.api.dto.ResponseListObj;
 import com.services.api.dto.order.OrderDto;
+import com.services.api.form.order.CheckOutForm;
 import com.services.api.form.order.CreateOrderForm;
 import com.services.api.form.order.UpdateOrderForm;
 import com.services.api.mapper.OrderMapper;
 import com.services.api.storage.criteria.OrderCriteria;
 import com.services.api.storage.model.Account;
+import com.services.api.storage.model.CartDetail;
 import com.services.api.storage.model.Order;
+import com.services.api.storage.model.OrderDetail;
 import com.services.api.storage.repository.AccountRepository;
+import com.services.api.storage.repository.CartDetailRepository;
+import com.services.api.storage.repository.OrderDetailRepository;
 import com.services.api.storage.repository.OrderRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +52,11 @@ public class OrderController {
     @Autowired
     AccountRepository accountRepository;
     
+    @Autowired
+    CartDetailRepository cartDetailRepository;
+
+    @Autowired
+    OrderDetailRepository orderDetailRepository;
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ApiMessageDto<ResponseListObj<OrderDto>> list(OrderCriteria orderCriteria, Pageable pageable) {
 
@@ -104,6 +117,36 @@ public class OrderController {
         orderRepository.save(order);
         apiMessageDto.setMessage("Create new order success");
 
+        return apiMessageDto;
+    }
+
+    @PostMapping(value = "/checkout/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ApiMessageDto<String> checkout(@Valid @RequestBody CheckOutForm checkOutForm, BindingResult bindingResul, @Valid @RequestBody Long id) {
+        ApiMessageDto<String> apiMessageDto = new ApiMessageDto<>();
+        Order order = new Order();
+        order.setState(0);
+        order.setCustomer(accountRepository.findById(id).orElse(null));
+        order.setTotal(0L);
+        orderRepository.save(order);
+        for (Long cartDetailId: checkOutForm.getCartDetailId()){
+            CartDetail cartDetail= cartDetailRepository.findById(cartDetailId).orElse(null);
+            if (cartDetail == null ){
+                apiMessageDto.setResult(false);
+                apiMessageDto.setMessage("Method Unavailable");
+                return apiMessageDto;
+            }else{
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.setQuantity(cartDetail.getQuantity());
+                orderDetail.setProduct(cartDetail.getProduct());
+                orderDetail.setPrice(cartDetail.getQuantity() * cartDetail.getProduct().getPrice());
+                orderDetail.setOrder(order);
+                orderDetailRepository.save(orderDetail);
+                order.setTotal(order.getTotal() + orderDetail.getPrice());
+            }
+        }
+        orderRepository.save(order);
+        apiMessageDto.setResult(true);
+        apiMessageDto.setMessage("Checkout in progress");
         return apiMessageDto;
     }
 

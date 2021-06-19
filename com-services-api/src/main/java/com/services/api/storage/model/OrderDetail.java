@@ -39,5 +39,5 @@ public class OrderDetail extends Auditable<String> {
     private Product product;
 
     @Column(name = "price")
-    private Long price;
+    private Integer price;
 }

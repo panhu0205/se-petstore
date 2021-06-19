@@ -17,5 +17,5 @@ public class OrderDetailDto {
     @ApiModelProperty(name = "orderDetailQuantity")
     private Integer orderDetailQuantity;
     @ApiModelProperty(name = "orderDetailPrice")
-    private Long orderDetailPrice; 
+    private Integer orderDetailPrice; 
 }
