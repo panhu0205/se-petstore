@@ -155,6 +155,7 @@ public class AccountController extends ABasicController {
         account.setPassword(passwordEncoder.encode(createAccountForm.getPassword()));
         account.setKind(ServiceConstant.USER_KIND_USER);
         account.setStatus(ServiceConstant.STATUS_ACTIVE);
+        account.setGroup(group);
         accountRepository.save(account);
         apiMessageDto.setMessage("Create account success");
         return apiMessageDto;

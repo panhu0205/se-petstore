@@ -33,4 +33,11 @@ public class Order extends Auditable<String>{
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "customer_id")
     private Account customer;
+
+    @Column(name = "address")
+    private String address;
+    
+    @Column(name = "total")
+    private Long total;
 }
+

@@ -13,4 +13,8 @@ public class OrderDto {
     private Integer orderState;
     @ApiModelProperty(name = "orderCustomer")
     private AccountDto orderCustomer;
+    @ApiModelProperty(name = "orderAddress")
+    private String orderAddress;
+    @ApiModelProperty(name = "orderTotal")
+    private Long orderTotal;
 }

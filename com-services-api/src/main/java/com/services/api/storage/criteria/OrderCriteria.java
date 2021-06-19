@@ -11,6 +11,7 @@ import javax.persistence.criteria.Root;
 import com.services.api.storage.model.Order;
 
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.util.ObjectUtils;
 
 import lombok.Data;
 
@@ -20,6 +21,8 @@ public class OrderCriteria {
     private Long id;
     private Integer state;
     private Long customerId;
+    private String address;
+    private Long total;
 
     public Specification<Order> getSpecification() {
         return new Specification<Order>() {
@@ -37,6 +40,12 @@ public class OrderCriteria {
                 }
                 if (getCustomerId() != null) {
                     predicates.add(cb.equal(root.get("customerId"), getCustomerId()));
+                }
+                if (!ObjectUtils.isEmpty(getAddress())) {
+                    predicates.add(cb.like(cb.lower(root.get("address")), "%" + getAddress().toLowerCase() + "%"));
+                }
+                if (getTotal() != null) {
+                    predicates.add(cb.equal(root.get("total"), getTotal()));
                 }
                 
                 return cb.and(predicates.toArray(new Predicate[predicates.size()]));
