@@ -45,11 +45,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     private static final String DATE_FORMAT = "dd/MM/yyyy";
     private static final String DATE_TIME_FORMAT = "dd/MM/yyyy HH:mm:ss";
-
     // @Override
     // public void addCorsMappings(CorsRegistry registry) {
     //     registry.addMapping("/**").allowCredentials(true).allowedMethods("*").allowedOrigins("*").allowedHeaders("*");
     // }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         String[] checkArray = new String[]{
