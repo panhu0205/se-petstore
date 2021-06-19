@@ -12,6 +12,7 @@ import com.services.api.dto.order.OrderDto;
 import com.services.api.form.order.CheckOutForm;
 import com.services.api.form.order.CreateOrderForm;
 import com.services.api.form.order.UpdateOrderForm;
+import com.services.api.form.order.ValidateForm;
 import com.services.api.mapper.OrderMapper;
 import com.services.api.storage.criteria.OrderCriteria;
 import com.services.api.storage.model.Account;
@@ -147,6 +148,70 @@ public class OrderController {
         orderRepository.save(order);
         apiMessageDto.setResult(true);
         apiMessageDto.setMessage("Checkout in progress");
+        return apiMessageDto;
+    }
+
+    @PutMapping(value = "/validate", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ApiMessageDto<String> validate (@Valid @RequestBody ValidateForm validateForm, BindingResult bindingResult) {
+        ApiMessageDto<String> apiMessageDto =new ApiMessageDto<>();
+        Order order = orderRepository.findById(validateForm.getOrderId()).orElse(null);
+        if (order == null){
+            apiMessageDto.setResult(false);
+            apiMessageDto.setMessage("Cannot find Order");
+            return apiMessageDto;
+        }else if(order.getState() == 0){
+            order.setState(1);
+            orderRepository.save(order);
+            apiMessageDto.setResult(true);
+            apiMessageDto.setMessage("Validate completed!");
+            return apiMessageDto;
+        }else{
+            apiMessageDto.setResult(false);
+            apiMessageDto.setMessage("Already Validated!");
+            return apiMessageDto;
+        }
+    }
+
+    @GetMapping(value = "/statistic/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ApiMessageDto<ResponseListObj<OrderDto>> getBussinessStatistic(@Valid @RequestBody Long productId, BindingResult bindingResult, Pageable pageable){
+        ApiMessageDto<ResponseListObj<OrderDto>> apiMessageDto = new ApiMessageDto<>();
+
+        Page<Order> orderPage = orderRepository.findByProductIdValidated(productId, pageable).orElse(null);
+        if(orderPage == null){
+            apiMessageDto.setResult(false);
+            apiMessageDto.setMessage("Nothing to get");
+            return apiMessageDto;
+        }
+
+        ResponseListObj<OrderDto> responseListObj = new ResponseListObj<>();
+        responseListObj.setData(orderMapper.fromEntityListToDtoList(orderPage.getContent()));
+        responseListObj.setPage(pageable.getPageNumber());
+        responseListObj.setTotalPage(orderPage.getTotalPages());
+
+        apiMessageDto.setData(responseListObj);
+        apiMessageDto.setMessage("List orders success");
+
+        return apiMessageDto;
+    }
+
+    @GetMapping(value = "/statistic", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ApiMessageDto<ResponseListObj<OrderDto>> getBussinessStatistic(BindingResult bindingResult, Pageable pageable){
+        ApiMessageDto<ResponseListObj<OrderDto>> apiMessageDto = new ApiMessageDto<>();
+
+        Page<Order> orderPage = orderRepository.findValidate(pageable).orElse(null);
+        if(orderPage == null){
+            apiMessageDto.setResult(false);
+            apiMessageDto.setMessage("Nothing to get");
+            return apiMessageDto;
+        }
+        ResponseListObj<OrderDto> responseListObj = new ResponseListObj<>();
+        responseListObj.setData(orderMapper.fromEntityListToDtoList(orderPage.getContent()));
+        responseListObj.setPage(pageable.getPageNumber());
+        responseListObj.setTotalPage(orderPage.getTotalPages());
+
+        apiMessageDto.setData(responseListObj);
+        apiMessageDto.setMessage("List orders success");
+
         return apiMessageDto;
     }
 
