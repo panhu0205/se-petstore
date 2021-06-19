@@ -137,6 +137,11 @@ public class OrderController {
                 return apiMessageDto;
             }else{
                 OrderDetail orderDetail = new OrderDetail();
+                if (cartDetail.getQuantity() > cartDetail.getProduct().getQuantity()){
+                    apiMessageDto.setResult(false);
+                    apiMessageDto.setMessage("Product doesnot have enough quantity");
+                    return apiMessageDto;
+                }
                 orderDetail.setQuantity(cartDetail.getQuantity());
                 orderDetail.setProduct(cartDetail.getProduct());
                 orderDetail.setPrice(cartDetail.getQuantity() * cartDetail.getProduct().getPrice());
