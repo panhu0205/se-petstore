@@ -19,13 +19,17 @@ public interface OrderMapper {
     @Mapping(source = "id", target = "orderId")
     @Mapping(source = "state", target = "orderState")
     @Mapping(source = "customer.id", target = "orderCustomer.id")
+    @Mapping(source = "address", target = "orderAddress")
+    @Mapping(source = "total", target = "orderTotal")
     OrderDto fromEntityToDto(Order order);
 
     @Mapping(source = "orderState", target = "state")
+    @Mapping(source = "orderAddress", target = "address")
     Order fromCreateFormToEntity(CreateOrderForm createOrderForm);
 
     @Mapping(source = "orderId", target = "id")
     @Mapping(source = "orderState", target = "state")
+    @Mapping(source = "orderAddress", target = "address")
     void fromUpdateFormToEntity(UpdateOrderForm updateOrderForm, @MappingTarget Order order);
 
     @IterableMapping(elementTargetType = OrderDto.class)

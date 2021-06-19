@@ -18,4 +18,8 @@ public class UpdateOrderForm {
     @NotNull(message = "cartDetailId cannot be null")
     @ApiModelProperty(name = "orderCustomerId")
     private Long orderCustomerId;
+    @NotNull(message = "orderAddress cannot be null")
+    @ApiModelProperty(name = "orderAddress")
+    private String orderAddress;
+
 }

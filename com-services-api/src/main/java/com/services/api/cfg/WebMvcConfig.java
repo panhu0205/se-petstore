@@ -46,10 +46,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private static final String DATE_FORMAT = "dd/MM/yyyy";
     private static final String DATE_TIME_FORMAT = "dd/MM/yyyy HH:mm:ss";
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowCredentials(true).allowedMethods("*").allowedOrigins("*").allowedHeaders("*");
-    }
+    // @Override
+    // public void addCorsMappings(CorsRegistry registry) {
+    //     registry.addMapping("/**").allowCredentials(true).allowedMethods("*").allowedOrigins("*").allowedHeaders("*");
+    // }
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         String[] checkArray = new String[]{
@@ -125,7 +125,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         .allowedOrigins("*")
         .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
         .allowedHeaders("*")
-        .allowCredentials(true)
-        .maxAge(_3600);
+        .allowCredentials(false)
+        .maxAge(MAX_AGE_SECS);
     }
 }
