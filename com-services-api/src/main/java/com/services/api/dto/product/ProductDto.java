@@ -19,4 +19,6 @@ public class ProductDto {
 
     private String origin;
 
+    private String postTitle;
+
 }

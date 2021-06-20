@@ -3,6 +3,7 @@ package com.services.api.form.product;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
@@ -22,5 +23,7 @@ public class UpdateProductForm {
     private Integer weight;
     @NotEmpty(message = "Product origin must not be empty")
     private String origin;
-
+    @NotNull(message = "petPostId cannot be null")
+    @ApiModelProperty(name = "petPostId")
+    private Long postId;
 }
