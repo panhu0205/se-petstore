@@ -5,6 +5,7 @@ import java.util.List;
 import com.services.api.dto.product.ProductDto;
 import com.services.api.form.product.CreateProductForm;
 import com.services.api.form.product.UpdateProductForm;
+import com.services.api.storage.model.Post;
 import com.services.api.storage.model.Product;
 
 import org.mapstruct.IterableMapping;
@@ -17,15 +18,15 @@ import org.mapstruct.ReportingPolicy;
 public interface ProductMapper {
 
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "name", target = "name")
+    @Mapping(source = "post.title", target = "postTitle")
     @Mapping(source = "price", target = "price")
     @Mapping(source = "quantity", target = "quantity")
     @Mapping(source = "status", target = "status")
     @Mapping(source = "weight", target = "weight")
     @Mapping(source = "origin", target = "origin")
+    @Mapping(source = "productCategory.name", target = "productCategory.productCategoryName")
     ProductDto fromEntityToDto(Product product);
 
-    @Mapping(source = "name", target = "name")
     @Mapping(source = "price", target = "price")
     @Mapping(source = "quantity", target = "quantity")
     @Mapping(source = "status", target = "status")
@@ -34,14 +35,19 @@ public interface ProductMapper {
     Product fromCreateFormToEntity(CreateProductForm createProductForm);
 
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "name", target = "name")
     @Mapping(source = "price", target = "price")
     @Mapping(source = "quantity", target = "quantity")
     @Mapping(source = "status", target = "status")
     @Mapping(source = "weight", target = "weight")
     @Mapping(source = "origin", target = "origin")
     void fromUpdateFormToEntity(UpdateProductForm updateProductForm, @MappingTarget Product product);
-
+ 
     @IterableMapping(elementTargetType = ProductDto.class)
     List<ProductDto> fromEntityListToDtoList(List<Product> productList);
+
+    @Mapping(source = "postTitle", target = "title")
+    @Mapping(source = "postImage", target = "image")
+    @Mapping(source = "postShortDescription", target = "shortDescription")
+    @Mapping(source = "postLongDescription", target = "longDescription")
+    Post fromCreateFormToPost(CreateProductForm createProductForm);
 }

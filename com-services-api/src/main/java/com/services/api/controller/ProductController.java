@@ -10,7 +10,11 @@ import com.services.api.form.product.CreateProductForm;
 import com.services.api.form.product.UpdateProductForm;
 import com.services.api.mapper.ProductMapper;
 import com.services.api.storage.criteria.ProductCriteria;
+import com.services.api.storage.model.Post;
 import com.services.api.storage.model.Product;
+import com.services.api.storage.model.ProductCategory;
+import com.services.api.storage.repository.PostRepository;
+import com.services.api.storage.repository.ProductCategoryRepository;
 import com.services.api.storage.repository.ProductRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +43,11 @@ public class ProductController {
     @Autowired
     private ProductMapper productMapper;
 
+    @Autowired
+    PostRepository postRepository;
+
+    @Autowired
+    ProductCategoryRepository productCategoryRepository;
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ApiMessageDto<ResponseListObj<ProductDto>> list(ProductCriteria productCriteria, Pageable pageable) {
 
@@ -89,7 +98,13 @@ public class ProductController {
 
         ApiMessageDto<String> apiMessageDto = new ApiMessageDto<>();
         var product = productMapper.fromCreateFormToEntity(createProductForm);
-
+        Post post = productMapper.fromCreateFormToPost(createProductForm);
+        postRepository.save(post);
+        product.setPost(post);
+        ProductCategory productCategory = new ProductCategory();
+        productCategory.setName(createProductForm.getProductCategoryName());
+        productCategoryRepository.save(productCategory);
+        product.setProductCategory(productCategory);
         productRepository.save(product);
         apiMessageDto.setMessage("Create new product success");
 
@@ -107,7 +122,20 @@ public class ProductController {
             return apiMessageDto;
         }
         productMapper.fromUpdateFormToEntity(updateProductForm, product);
-
+        Post post = postRepository.findById(updateProductForm.getPostId()).orElse(null);
+        if (post == null){
+            apiMessageDto.setResult(false);
+            apiMessageDto.setMessage("Post is not found");
+            return apiMessageDto;
+        }
+        product.setPost(post);
+        ProductCategory productCategory = productCategoryRepository.findById(updateProductForm.getProductCategoryId()).orElse(null);
+        if (productCategory == null){
+            apiMessageDto.setResult(false);
+            apiMessageDto.setMessage("Category is not found");
+            return apiMessageDto;
+        }
+        product.setProductCategory(productCategory);
         productRepository.save(product);
         apiMessageDto.setMessage("Update product success");
 

@@ -19,7 +19,8 @@ import lombok.Data;
 public class ProductCriteria {
 
     private Long id;
-    private String name;
+    private Long postId;
+    private Long productCategoryId;
     private Integer price;
     private Integer quantity;
     private Integer status;
@@ -37,8 +38,11 @@ public class ProductCriteria {
                 if (getId() != null) {
                     predicates.add(cb.equal(root.get("id"), getId()));
                 }
-                if (!ObjectUtils.isEmpty(getName())) {
-                    predicates.add(cb.like(cb.lower(root.get("name")), "%" + getName().toLowerCase() + "%"));
+                if (getPostId() != null) {
+                    predicates.add(cb.equal(root.get("postId"), getPostId()));
+                }
+                if (getProductCategoryId() != null) {
+                    predicates.add(cb.equal(root.get("productCategoryId"), getProductCategoryId()));
                 }
                 if (getPrice() != null) {
                     predicates.add(cb.equal(root.get("price"), getPrice()));

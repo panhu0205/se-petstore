@@ -1,11 +1,15 @@
 package com.services.api.storage.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -18,13 +22,14 @@ import lombok.Setter;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-public class Product {
+public class Product  extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "product_name")
-    private String name;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     @Column(name = "price")
     private Integer price;
@@ -40,5 +45,9 @@ public class Product {
 
     @Column(name = "Origin")
     private String origin;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "productCategory_id")
+    private ProductCategory productCategory;
 
 }
