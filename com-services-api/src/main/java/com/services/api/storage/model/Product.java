@@ -46,4 +46,8 @@ public class Product  extends Auditable<String> {
     @Column(name = "Origin")
     private String origin;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "productCategory_id")
+    private ProductCategory productCategory;
+
 }

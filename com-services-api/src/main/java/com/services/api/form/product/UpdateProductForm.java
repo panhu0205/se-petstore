@@ -26,4 +26,6 @@ public class UpdateProductForm {
     @NotNull(message = "petPostId cannot be null")
     @ApiModelProperty(name = "petPostId")
     private Long postId;
+    @NotNull(message = "productCategoryId cannot be null")
+    private Long productCategoryId;
 }

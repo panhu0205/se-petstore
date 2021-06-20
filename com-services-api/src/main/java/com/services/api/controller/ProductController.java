@@ -12,7 +12,9 @@ import com.services.api.mapper.ProductMapper;
 import com.services.api.storage.criteria.ProductCriteria;
 import com.services.api.storage.model.Post;
 import com.services.api.storage.model.Product;
+import com.services.api.storage.model.ProductCategory;
 import com.services.api.storage.repository.PostRepository;
+import com.services.api.storage.repository.ProductCategoryRepository;
 import com.services.api.storage.repository.ProductRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,8 @@ public class ProductController {
     @Autowired
     PostRepository postRepository;
 
+    @Autowired
+    ProductCategoryRepository productCategoryRepository;
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ApiMessageDto<ResponseListObj<ProductDto>> list(ProductCriteria productCriteria, Pageable pageable) {
 
@@ -101,6 +105,13 @@ public class ProductController {
             return apiMessageDto;
         }
         product.setPost(post);
+        ProductCategory productCategory = productCategoryRepository.findById(createProductForm.getProductCategoryId()).orElse(null);
+        if (productCategory == null){
+            apiMessageDto.setResult(false);
+            apiMessageDto.setMessage("Category is not found");
+            return apiMessageDto;
+        }
+        product.setProductCategory(productCategory);
         productRepository.save(product);
         apiMessageDto.setMessage("Create new product success");
 
@@ -125,7 +136,13 @@ public class ProductController {
             return apiMessageDto;
         }
         product.setPost(post);
-
+        ProductCategory productCategory = productCategoryRepository.findById(updateProductForm.getProductCategoryId()).orElse(null);
+        if (productCategory == null){
+            apiMessageDto.setResult(false);
+            apiMessageDto.setMessage("Category is not found");
+            return apiMessageDto;
+        }
+        product.setProductCategory(productCategory);
         productRepository.save(product);
         apiMessageDto.setMessage("Update product success");
 

@@ -1,5 +1,7 @@
 package com.services.api.dto.product;
 
+import com.services.api.dto.productcategory.ProductCategoryDto;
+
 import lombok.Data;
 
 @Data
@@ -21,4 +23,5 @@ public class ProductDto {
 
     private String postTitle;
 
+    private ProductCategoryDto productCategory;
 }

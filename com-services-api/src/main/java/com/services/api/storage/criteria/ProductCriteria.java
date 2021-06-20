@@ -20,6 +20,7 @@ public class ProductCriteria {
 
     private Long id;
     private Long postId;
+    private Long productCategoryId;
     private Integer price;
     private Integer quantity;
     private Integer status;
@@ -39,6 +40,9 @@ public class ProductCriteria {
                 }
                 if (getPostId() != null) {
                     predicates.add(cb.equal(root.get("postId"), getPostId()));
+                }
+                if (getProductCategoryId() != null) {
+                    predicates.add(cb.equal(root.get("productCategoryId"), getProductCategoryId()));
                 }
                 if (getPrice() != null) {
                     predicates.add(cb.equal(root.get("price"), getPrice()));

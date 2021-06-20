@@ -9,8 +9,8 @@ import lombok.Data;
 @Data
 public class CreateProductForm {
 
-    @NotNull(message = "petPostId cannot be null")
-    @ApiModelProperty(name = "petPostId")
+    @NotNull(message = "postId cannot be null")
+    @ApiModelProperty(name = "postId")
     private Long postId;
     @NotNull(message = "Product price must not be null")
     private Integer price;
@@ -22,5 +22,6 @@ public class CreateProductForm {
     private Integer weight;
     @NotEmpty(message = "Product origin must not be empty")
     private String origin;
-
+    @NotNull(message = "productCategoryId cannot be null")
+    private Long productCategoryId;
 }

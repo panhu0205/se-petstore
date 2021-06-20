@@ -24,6 +24,7 @@ public interface ProductMapper {
     @Mapping(source = "status", target = "status")
     @Mapping(source = "weight", target = "weight")
     @Mapping(source = "origin", target = "origin")
+    @Mapping(source = "productCategory.name", target = "productCategory.productCategoryName")
     ProductDto fromEntityToDto(Product product);
 
     @Mapping(source = "price", target = "price")
