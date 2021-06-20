@@ -44,4 +44,10 @@ public interface ProductMapper {
  
     @IterableMapping(elementTargetType = ProductDto.class)
     List<ProductDto> fromEntityListToDtoList(List<Product> productList);
+
+    @Mapping(source = "postTitle", target = "title")
+    @Mapping(source = "postImage", target = "image")
+    @Mapping(source = "postShortDescription", target = "shortDescription")
+    @Mapping(source = "postLongDescription", target = "longDescription")
+    Post fromCreateFormToPost(CreateProductForm createProductForm);
 }

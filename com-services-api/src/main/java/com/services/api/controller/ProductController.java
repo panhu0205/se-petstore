@@ -98,19 +98,12 @@ public class ProductController {
 
         ApiMessageDto<String> apiMessageDto = new ApiMessageDto<>();
         var product = productMapper.fromCreateFormToEntity(createProductForm);
-        Post post = postRepository.findById(createProductForm.getPostId()).orElse(null);
-        if (post == null){
-            apiMessageDto.setResult(false);
-            apiMessageDto.setMessage("Post is not found");
-            return apiMessageDto;
-        }
+        Post post = productMapper.fromCreateFormToPost(createProductForm);
+        postRepository.save(post);
         product.setPost(post);
-        ProductCategory productCategory = productCategoryRepository.findById(createProductForm.getProductCategoryId()).orElse(null);
-        if (productCategory == null){
-            apiMessageDto.setResult(false);
-            apiMessageDto.setMessage("Category is not found");
-            return apiMessageDto;
-        }
+        ProductCategory productCategory = new ProductCategory();
+        productCategory.setName(createProductForm.getProductCategoryName());
+        productCategoryRepository.save(productCategory);
         product.setProductCategory(productCategory);
         productRepository.save(product);
         apiMessageDto.setMessage("Create new product success");
