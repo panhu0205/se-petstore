@@ -18,7 +18,10 @@ import org.mapstruct.ReportingPolicy;
 public interface ProductMapper {
 
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "post.title", target = "postTitle")
+    @Mapping(source = "post.title", target = "post.postTitle")
+    @Mapping(source = "post.image", target = "post.postImage")
+    @Mapping(source = "post.shortDescription", target = "post.postShortDescription")
+    @Mapping(source = "post.longDescription", target = "post.postLongDescription")
     @Mapping(source = "price", target = "price")
     @Mapping(source = "quantity", target = "quantity")
     @Mapping(source = "status", target = "status")
