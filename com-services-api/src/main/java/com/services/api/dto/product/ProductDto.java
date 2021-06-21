@@ -1,5 +1,6 @@
 package com.services.api.dto.product;
 
+import com.services.api.dto.post.PostDto;
 import com.services.api.dto.productcategory.ProductCategoryDto;
 
 import lombok.Data;
@@ -9,7 +10,7 @@ public class ProductDto {
 
     private Long id;
 
-    private String name;
+    private PostDto post;
 
     private Integer price;
 
